@@ -1,25 +1,26 @@
-const User = require('../models/user');
-const NotFoundError = require('../errors/not-found-err');
-const BadRequestError = require('../errors/bad-request-err');
+const User = require("../models/user");
+const NotFoundError = require("../errors/not-found-err");
+const BadRequestError = require("../errors/bad-request-err");
+const bcrypt = require("bcryptjs");
 
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch(() => res.status(500).send({ message: 'Error' }));
+    .catch(() => res.status(500).send({ message: "Error" }));
 };
 
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .orFail(() => {
       const error = new NotFoundError(
-        'No se encontró ningún usuario con ese ID',
+        "No se encontró ningún usuario con ese ID",
       );
       throw error;
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError('ID de usuario invalido.'));
+      if (err.name === "CastError") {
+        next(new BadRequestError("ID de usuario invalido."));
       }
 
       next(err);
@@ -27,11 +28,16 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+  const { name, about, avatar, email, password } = req.body;
+
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => {
+      return User.create({ name, about, avatar, email, password: hash });
+    })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === "ValidationError") {
         next(new BadRequestError(err.message));
       }
       next(err);
@@ -44,17 +50,17 @@ module.exports.updateUser = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { returnDocument: 'after', runValidators: true, upsert: false },
+    { returnDocument: "after", runValidators: true, upsert: false },
   )
     .orFail(() => {
       const error = new NotFoundError(
-        'No se encontró ningún usuario con ese ID',
+        "No se encontró ningún usuario con ese ID",
       );
       throw error;
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === "ValidationError") {
         next(new BadRequestError(err.message));
       }
 
@@ -68,17 +74,17 @@ module.exports.updateUserAvatar = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { returnDocument: 'after', runValidators: true, upsert: false },
+    { returnDocument: "after", runValidators: true, upsert: false },
   )
     .orFail(() => {
       const error = new NotFoundError(
-        'No se encontró ningún usuario con ese ID',
+        "No se encontró ningún usuario con ese ID",
       );
       throw error;
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === "ValidationError") {
         next(new BadRequestError(err.message));
       }
 

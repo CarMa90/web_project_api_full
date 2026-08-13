@@ -4,8 +4,8 @@ const validator = require("validator");
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true,
-    unique: true,
+    required: [true, "El email es obligatorio"],
+    unique: [true, "Verifique el email o la contraseña"],
     validate: {
       validator(v) {
         return validator.isEmail(v);
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: [true, "La contraseña es obligatoria"],
     minlength: 8,
     validate: {
       validator(v) {
@@ -29,19 +29,20 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
+    default: "Jacques Cousteau",
     minlength: 2,
     maxlength: 30,
-    required: true,
   },
   about: {
     type: String,
+    default: "Explorador",
     minlength: 2,
     maxlength: 30,
-    required: true,
   },
   avatar: {
     type: String,
-    required: true,
+    default:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg",
     validate: {
       validator(v) {
         const regex =
