@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -17,7 +18,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "La contraseña es obligatoria"],
-    minlength: 8,
+    minlength: [8, "La contraseña debe de ser de al menos 8 caracteres"],
     validate: {
       validator(v) {
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
@@ -52,6 +53,10 @@ const userSchema = new mongoose.Schema({
       message: (props) => `Lo sentimos ${props.value} no es un enlace válido.`,
     },
   },
+});
+
+userSchema.pre("save", async function () {
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -30,17 +30,20 @@ module.exports.getUserById = (req, res, next) => {
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
-  bcrypt
-    .hash(password, 10)
-    .then((hash) => {
-      return User.create({ name, about, avatar, email, password: hash });
-    })
+  User.create({ name, about, avatar, email, password })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(new BadRequestError(err.message));
+        const message = Object.values(err.errors)
+          .map((error) => error.message)
+          .join(", ");
+
+        return next(new BadRequestError(message));
       }
-      next(err);
+      if (err.cause?.code === 11000) {
+        return next(new BadRequestError(err.message));
+      }
+      return next(err);
     });
 };
 
