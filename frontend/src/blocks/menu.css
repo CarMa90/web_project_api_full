@@ -1,0 +1,50 @@
+.menu {
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 18px;
+  text-align: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  display: none;
+}
+
+.menu__mobile {
+  display: block;
+}
+
+.menu__logout {
+  cursor: pointer;
+  color: #a9a9a9;
+}
+
+.menu__icon {
+  width: 32px;
+  height: auto;
+  cursor: pointer;
+}
+
+.menu__icon:hover {
+  opacity: 0.8;
+}
+
+.inactive {
+  display: none;
+}
+
+@media screen and (min-width: 650px) {
+  .menu {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+  }
+
+  .menu__icon {
+    display: none;
+  }
+
+  .menu__mobile {
+    display: none;
+  }
+}
