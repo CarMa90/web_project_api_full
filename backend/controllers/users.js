@@ -30,7 +30,17 @@ module.exports.getUserById = (req, res, next) => {
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
-  User.create({ name, about, avatar, email, password })
+  if (password.length < 8) {
+    return next(
+      new BadRequestError("La contraseña debe de ser de al menos 8 caracteres"),
+    );
+  }
+
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => {
+      return User.create({ name, about, avatar, email, password: hash });
+    })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === "ValidationError") {

@@ -9,8 +9,10 @@ const userRegisterValidator = celebrate({
       }),
       password: Joi.string()
         .required()
+        .min(8)
         .pattern(new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/))
         .messages({
+          "string.min": "La contraseña debe de ser de al menos 8 caracteres",
           "string.pattern.base":
             "La contraseña debe de contener al menos una mayuscula, una minuscula, un número y un símbolo",
           "any.required": "El campo password es requerido",

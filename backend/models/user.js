@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -53,10 +52,6 @@ const userSchema = new mongoose.Schema({
       message: (props) => `Lo sentimos ${props.value} no es un enlace válido.`,
     },
   },
-});
-
-userSchema.pre("save", async function () {
-  this.password = await bcrypt.hash(this.password, 10);
 });
 
 module.exports = mongoose.model("User", userSchema);
