@@ -1,7 +1,9 @@
 const User = require("../models/user");
 const NotFoundError = require("../errors/not-found-err");
 const BadRequestError = require("../errors/bad-request-err");
+const UnauthorizedError = require("../errors/unauthorized-err");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -102,5 +104,19 @@ module.exports.updateUserAvatar = (req, res, next) => {
       }
 
       next(err);
+    });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, "some-secret-key");
+
+      return res.status(200).send({ token });
+    })
+    .catch((err) => {
+      return next(new UnauthorizedError("Verifique el email o contraseña"));
     });
 };

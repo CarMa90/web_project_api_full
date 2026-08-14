@@ -4,6 +4,8 @@ const cardsRoutes = require("./routes/cards");
 const usersRoutes = require("./routes/users");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { errors } = require("celebrate");
+const { createUser, login } = require("./controllers/users");
+const { userRegisterValidator } = require("./middlewares/userValidations");
 
 const app = express();
 
@@ -15,6 +17,9 @@ const { PORT = 3000 } = process.env;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.post("/signin", userRegisterValidator, login);
+app.post("/signup", userRegisterValidator, createUser);
 
 app.use((req, res, next) => {
   req.user = {
