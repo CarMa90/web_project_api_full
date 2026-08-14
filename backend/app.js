@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+require("dotenv").config();
 const cardsRoutes = require("./routes/cards");
 const usersRoutes = require("./routes/users");
 const { requestLogger, errorLogger } = require("./middlewares/logger");

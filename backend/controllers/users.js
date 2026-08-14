@@ -4,6 +4,9 @@ const BadRequestError = require("../errors/bad-request-err");
 const UnauthorizedError = require("../errors/unauthorized-err");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getUsers = (req, res) => {
   User.find({})
@@ -112,11 +115,19 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, "some-secret-key");
-
+      console.log(`Ejecutando then ${user}`);
+      console.log(JWT_SECRET);
+      console.log(NODE_ENV);
+      const token = jwt.sign(
+        { _id: user._id },
+        (NODE_ENV = "production" ? JWT_SECRET : "dev-secret"),
+      );
+      console.log(`este es el token ${token}`);
       return res.status(200).send({ token });
     })
     .catch((err) => {
+      console.log("estoy en el catch");
+      return next(err.message);
       return next(new UnauthorizedError("Verifique el email o contraseña"));
     });
 };
