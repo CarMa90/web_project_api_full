@@ -6,6 +6,7 @@ const {
   updateUser,
   updateUserAvatar,
   login,
+  getUserInfo,
 } = require("../controllers/users");
 const {
   userRegisterValidator,
@@ -14,6 +15,8 @@ const {
 } = require("../middlewares/userValidations");
 
 router.get("/", getUsers);
+
+router.get("/me", getUserInfo);
 
 router.get("/:userId", getUserById);
 

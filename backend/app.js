@@ -7,6 +7,7 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { errors } = require("celebrate");
 const { createUser, login } = require("./controllers/users");
 const { userRegisterValidator } = require("./middlewares/userValidations");
+const auth = require("./middlewares/auth");
 
 const app = express();
 
@@ -22,15 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/signin", userRegisterValidator, login);
 app.post("/signup", userRegisterValidator, createUser);
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: "6a7d2e6c0a4dc1c979369784",
-  };
-
-  next();
-});
-
 app.use(requestLogger);
+
+app.use(auth);
 
 app.use("/users", usersRoutes);
 

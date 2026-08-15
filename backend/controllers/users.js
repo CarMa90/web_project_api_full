@@ -14,6 +14,16 @@ module.exports.getUsers = (req, res) => {
     .catch(() => res.status(500).send({ message: "Error" }));
 };
 
+module.exports.getUserInfo = (req, res, next) => {
+  const { _id } = req.user;
+
+  User.findById(_id)
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      return next(new UnauthorizedError("Autorización requerida"));
+    });
+};
+
 module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .orFail(() => {
