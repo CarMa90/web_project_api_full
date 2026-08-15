@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema({
       message: () =>
         "La contraseña debe de contener al menos una mayuscula, una minuscula, un número y un caracter especial.",
     },
+    select: false,
   },
   name: {
     type: String,
@@ -56,19 +57,21 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
-  return this.findOne({ email }).then((user) => {
-    if (!user) {
-      return Promise.reject(new Error("Verifique el email o contraseña"));
-    }
-
-    return bcrypt.compare(password, user.password).then((matched) => {
-      if (!matched) {
+  return this.findOne({ email })
+    .select("+password")
+    .then((user) => {
+      if (!user) {
         return Promise.reject(new Error("Verifique el email o contraseña"));
       }
 
-      return user;
+      return bcrypt.compare(password, user.password).then((matched) => {
+        if (!matched) {
+          return Promise.reject(new Error("Verifique el email o contraseña"));
+        }
+
+        return user;
+      });
     });
-  });
 };
 
 module.exports = mongoose.model("User", userSchema);
