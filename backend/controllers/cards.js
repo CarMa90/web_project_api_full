@@ -1,12 +1,13 @@
-const Card = require('../models/card');
-const NotFoundError = require('../errors/not-found-err');
-const BadRequestError = require('../errors/bad-request-err');
+const Card = require("../models/card");
+const NotFoundError = require("../errors/not-found-err");
+const BadRequestError = require("../errors/bad-request-err");
+const UnauthorizedError = require("../errors/unauthorized-err");
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .orFail(() => {
       const error = new NotFoundError(
-        'No fue posible encontrar los elementos buscados',
+        "No fue posible encontrar los elementos buscados",
       );
       throw error;
     })
@@ -22,7 +23,7 @@ module.exports.createCard = (req, res, next) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === "ValidationError") {
         next(new BadRequestError(err.message));
       }
       next(err);
@@ -30,17 +31,24 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCardById = (req, res, next) => {
-  Card.findByIdAndDelete(req.params.cardId)
+  Card.findById(req.params.cardId)
     .orFail(() => {
       const error = new NotFoundError(
-        'No se encontró ninguna tarjeta con ese ID',
+        "No se encontró ninguna tarjeta con ese ID",
       );
       throw error;
     })
+    .then((card) => {
+      if (card.owner !== req.user._id) {
+        throw new UnauthorizedError("Autorización requerida");
+      }
+
+      return Card.findByIdAndDelete(req.params.cardId);
+    })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequestError('ID de tarjeta inválido'));
+      if (err.name === "CastError") {
+        next(new BadRequestError("ID de tarjeta inválido"));
       }
 
       next(err);
@@ -53,7 +61,7 @@ module.exports.likeCard = (req, res, next) => {
     {
       $addToSet: { likes: req.user._id },
     },
-    { returnDocument: 'after' },
+    { returnDocument: "after" },
   )
     .orFail(() => {
       const error = new NotFoundError(
@@ -63,7 +71,7 @@ module.exports.likeCard = (req, res, next) => {
     })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === "CastError") {
         next(new BadRequestError(`El id: ${req.params.cardId} no es válido`));
       }
 
@@ -77,7 +85,7 @@ module.exports.dislikeCard = (req, res, next) => {
     {
       $pull: { likes: req.user._id },
     },
-    { returnDocument: 'after' },
+    { returnDocument: "after" },
   )
     .orFail(() => {
       const error = new NotFoundError(
@@ -87,7 +95,7 @@ module.exports.dislikeCard = (req, res, next) => {
     })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === "CastError") {
         next(new BadRequestError(`El id: ${req.params.cardId} no es válido`));
       }
 
