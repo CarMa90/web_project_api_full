@@ -48,9 +48,9 @@ app.use((err, req, res, next) => {
   console.log("ERROR COMPLETO:");
   console.log(JSON.stringify(err, null, 2));
 
-  if (err.joi) {
+  if (err.validation) {
     return res.status(400).send({
-      message: err.joi.details.body.message,
+      message: err.validation.body.message,
     });
   }
 
