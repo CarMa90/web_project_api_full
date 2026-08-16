@@ -8,6 +8,7 @@ const { createUser, login } = require("./controllers/users");
 const { userRegisterValidator } = require("./middlewares/userValidations");
 const auth = require("./middlewares/auth");
 const cors = require("cors");
+const { errors } = require("celebrate");
 
 const app = express();
 
@@ -41,17 +42,22 @@ app.use((req, res) => {
 
 app.use(errorLogger);
 
-app.use((err, req, res, next) => {
-  console.log("========== ERROR ==========");
-  console.log("err.name:", err.name);
-  console.log("err.message:", err.message);
-  console.log("err.statusCode:", err.statusCode);
-  console.log("err.validation:", err.validation);
-  console.log("===========================");
+app.use(errors());
 
-  if (err.validation) {
+app.use((err, req, res, next) => {
+  console.log("ERROR COMPLETO:");
+  console.log(err);
+
+  console.log("name:", err.name);
+  console.log("message:", err.message);
+  console.log("statusCode:", err.statusCode);
+  console.log("details:", err.details);
+
+  if (err.details) {
+    const message = err.details.map((detail) => detail.message).join(", ");
+
     return res.status(400).send({
-      message: err.validation.body.message,
+      message,
     });
   }
 
