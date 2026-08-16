@@ -48,7 +48,7 @@ module.exports.deleteCardById = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === "CastError") {
-        next(new BadRequestError("ID de tarjeta inválido"));
+        return next(new BadRequestError("ID de tarjeta inválido"));
       }
 
       next(err);
