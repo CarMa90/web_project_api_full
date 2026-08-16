@@ -8,7 +8,6 @@ const { createUser, login } = require("./controllers/users");
 const { userRegisterValidator } = require("./middlewares/userValidations");
 const auth = require("./middlewares/auth");
 const cors = require("cors");
-const { errors } = require("celebrate");
 
 const app = express();
 
@@ -42,19 +41,12 @@ app.use((req, res) => {
 
 app.use(errorLogger);
 
-app.use(errors());
-
 app.use((err, req, res, next) => {
   console.log("ERROR COMPLETO:");
   console.log(err);
 
-  console.log("name:", err.name);
-  console.log("message:", err.message);
-  console.log("statusCode:", err.statusCode);
-  console.log("details:", err.details);
-
-  if (err.details) {
-    const message = err.details.map((detail) => detail.message).join(", ");
+  if (err.joi) {
+    const message = err.joi.details.map((detail) => detail.message).join(", ");
 
     return res.status(400).send({
       message,
@@ -63,7 +55,7 @@ app.use((err, req, res, next) => {
 
   const { statusCode = 500, message } = err;
 
-  res.status(statusCode).send({
+  return res.status(statusCode).send({
     message:
       statusCode === 500 ? "Se ha producido un error en el servidor." : message,
   });
