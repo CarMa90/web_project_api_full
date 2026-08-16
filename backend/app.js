@@ -4,7 +4,6 @@ require("dotenv").config();
 const cardsRoutes = require("./routes/cards");
 const usersRoutes = require("./routes/users");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
-const { errors } = require("celebrate");
 const { createUser, login } = require("./controllers/users");
 const { userRegisterValidator } = require("./middlewares/userValidations");
 const auth = require("./middlewares/auth");
@@ -42,15 +41,13 @@ app.use((req, res) => {
 
 app.use(errorLogger);
 
-app.use(errors());
-
 app.use((err, req, res, next) => {
   console.log("ERROR COMPLETO:");
   console.log(JSON.stringify(err, null, 2));
 
-  if (err.validation) {
+  if (err.joi) {
     return res.status(400).send({
-      message: err.validation.body.message,
+      message: err.joi.details[0].message,
     });
   }
 
