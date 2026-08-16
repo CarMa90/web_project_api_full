@@ -47,6 +47,13 @@
   cursor: pointer;
 }
 
+.card__like-space {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
 .card__delete-button {
   width: 18px;
   height: 18px;

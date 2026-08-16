@@ -1,4 +1,4 @@
-// import { getToken } from "./token";
+import { getToken } from "./token";
 
 class Api {
   constructor(options) {
@@ -6,20 +6,31 @@ class Api {
     this.headers = options.headers;
   }
 
+  getHeaders() {
+    const token = getToken();
+
+    return {
+      ...this.headers,
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
   getInitialCards() {
     // console.log(this.headers);
-    return fetch(`${this.url}cards/`, { headers: this.headers }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
+    return fetch(`${this.url}cards/`, { headers: this.getHeaders() }).then(
+      (res) => {
+        if (res.ok) {
+          return res.json();
+        }
 
-      return Promise.reject(`Error: ${res.status}`);
-    });
+        return Promise.reject(`Error: ${res.status}`);
+      },
+    );
   }
 
   getNewCard(data) {
     return fetch(`${this.url}cards/`, {
-      headers: this.headers,
+      headers: this.getHeaders(),
       body: JSON.stringify({ name: data.name, link: data.link }),
       method: "POST",
     }).then((res) => {
@@ -31,12 +42,14 @@ class Api {
     });
   }
 
-  handleCardLikes(card) {
+  async handleCardLikes(card) {
     // console.log(card);
-    if (card.isLiked) {
-      return fetch(`${this.url}${card._id}/likes`, {
+    const userInfo = await this.getUserInfo();
+
+    if (card.likes.includes(userInfo.data._id)) {
+      return fetch(`${this.url}cards/${card._id}/likes`, {
         method: "DELETE",
-        headers: this.headers,
+        headers: this.getHeaders(),
       }).then((res) => {
         if (res.ok) {
           return res.json();
@@ -44,10 +57,10 @@ class Api {
 
         return Promise.reject(`Error: ${res.status}`);
       });
-    } else if (!card.isLiked) {
+    } else if (!card.likes.includes(userInfo.data._id)) {
       return fetch(`${this.url}cards/${card._id}/likes`, {
         method: "PUT",
-        headers: this.headers,
+        headers: this.getHeaders(),
       }).then((res) => {
         if (res.ok) {
           return res.json();
@@ -60,7 +73,7 @@ class Api {
 
   deleteCard(id) {
     return fetch(`${this.url}cards/${id}`, {
-      headers: this.headers,
+      headers: this.getHeaders(),
       method: "DELETE",
     }).then((res) => {
       if (res.ok) {
@@ -72,7 +85,7 @@ class Api {
   }
 
   getUserInfo() {
-    return fetch(`${this.url}users/me`, { headers: this.headers }).then(
+    return fetch(`${this.url}users/me`, { headers: this.getHeaders() }).then(
       (res) => {
         if (res.ok) {
           return res.json();
@@ -84,7 +97,7 @@ class Api {
 
   setUserInfo(data) {
     return fetch(`${this.url}users/me`, {
-      headers: this.headers,
+      headers: this.getHeaders(),
       method: "PATCH",
       body: JSON.stringify(data),
     }).then((res) => {
@@ -97,7 +110,7 @@ class Api {
 
   changeProfilePicture(data) {
     return fetch(`${this.url}users/me/avatar`, {
-      headers: this.headers,
+      headers: this.getHeaders(),
       method: "PATCH",
       body: JSON.stringify(data),
     }).then((res) => {
@@ -109,14 +122,14 @@ class Api {
   }
 }
 
-// const token = getToken();
+const token = getToken();
 // console.log(token);
 
 export const api = new Api({
   url: "https://api.ils.heise.cl/",
   headers: {
-    Authorization: "288e77e1-cc55-482e-83a6-7664a6a338f5",
-    // Authorization: `Bearer ${token}`,
+    // Authorization: "288e77e1-cc55-482e-83a6-7664a6a338f5",
+    Authorization: `Bearer ${token}`,
     "content-type": "application/json",
   },
 });

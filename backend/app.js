@@ -18,13 +18,13 @@ mongoose
 
 const { PORT = 3000 } = process.env;
 
+app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post("/signin", userRegisterValidator, login);
 app.post("/signup", userRegisterValidator, createUser);
-
-app.use(cors());
 
 app.use(requestLogger);
 

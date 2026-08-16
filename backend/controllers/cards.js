@@ -39,7 +39,7 @@ module.exports.deleteCardById = (req, res, next) => {
       throw error;
     })
     .then((card) => {
-      if (card.owner !== req.user._id) {
+      if (!card.owner.equals(req.user._id)) {
         throw new UnauthorizedError("Autorización requerida");
       }
 

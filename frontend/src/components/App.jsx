@@ -26,16 +26,16 @@ function App() {
 
   const getInitialCards = async () => {
     await api.getInitialCards().then((data) => {
-      setCards(data);
+      setCards(data.data.slice().reverse());
     });
   };
 
   async function handleCardlikes(card) {
     await api.handleCardLikes(card).then((newCard) => {
       setCards((state) => {
-        return state.map((currentCard) =>
-          currentCard._id === card._id ? newCard : currentCard,
-        );
+        return state.map((currentCard) => {
+          return currentCard._id === card._id ? newCard.data : currentCard;
+        });
       });
     });
   }
@@ -52,7 +52,7 @@ function App() {
   const handleAddPlaceSubmit = (data) => {
     (async () => {
       api.getNewCard(data).then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([newCard.data, ...cards]);
         handleClosePopup();
       });
     })();
@@ -72,7 +72,7 @@ function App() {
 
   const getUserInfo = async () => {
     await api.getUserInfo().then((data) => {
-      setCurrentUser(data);
+      setCurrentUser(data.data);
     });
   };
 
