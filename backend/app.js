@@ -45,11 +45,12 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
-  if (err.joi) {
-    const message = err.joi.details.map((detail) => detail.message).join(", ");
+  console.log("ERROR COMPLETO:");
+  console.log(JSON.stringify(err, null, 2));
 
+  if (err.joi) {
     return res.status(400).send({
-      message,
+      message: err.joi.details.body.message,
     });
   }
 
