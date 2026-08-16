@@ -42,12 +42,16 @@ app.use((req, res) => {
 app.use(errorLogger);
 
 app.use((err, req, res, next) => {
-  console.log("ERROR COMPLETO:");
-  console.log(JSON.stringify(err, null, 2));
+  console.log("========== ERROR ==========");
+  console.log("err.name:", err.name);
+  console.log("err.message:", err.message);
+  console.log("err.statusCode:", err.statusCode);
+  console.log("err.validation:", err.validation);
+  console.log("===========================");
 
-  if (err.joi) {
+  if (err.validation) {
     return res.status(400).send({
-      message: err.joi.details[0].message,
+      message: err.validation.body.message,
     });
   }
 
