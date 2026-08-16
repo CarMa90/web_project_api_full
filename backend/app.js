@@ -8,6 +8,7 @@ const { createUser, login } = require("./controllers/users");
 const { userRegisterValidator } = require("./middlewares/userValidations");
 const auth = require("./middlewares/auth");
 const cors = require("cors");
+const { isCelebrateError } = require("celebrate");
 
 const app = express();
 
@@ -45,12 +46,14 @@ app.use((err, req, res, next) => {
   console.log("ERROR COMPLETO:");
   console.log(err);
 
-  if (err.joi) {
-    const message = err.joi.details.map((detail) => detail.message).join(", ");
+  if (isCelebrateError(err)) {
+    const body = err.details.get("body");
 
-    return res.status(400).send({
-      message,
-    });
+    if (body) {
+      return res.status(400).send({
+        message: body.details[0].message,
+      });
+    }
   }
 
   const { statusCode = 500, message } = err;
