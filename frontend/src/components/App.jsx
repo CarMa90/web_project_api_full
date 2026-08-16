@@ -79,7 +79,7 @@ function App() {
   const handleUpdateUser = (data) => {
     (async () => {
       await api.setUserInfo(data).then((newData) => {
-        setCurrentUser(newData);
+        setCurrentUser(newData.data);
         handleClosePopup();
       });
     })();
@@ -88,7 +88,7 @@ function App() {
   const handleUpdateAvatar = (data) => {
     (async () => {
       await api.changeProfilePicture(data).then((newData) => {
-        setCurrentUser(newData);
+        setCurrentUser(newData.data);
         handleClosePopup();
       });
     })();
@@ -143,7 +143,7 @@ function App() {
       .catch((err) => {
         setSuccess(false);
         setIsOpen(true);
-        setErrorResponse(`${err.error}`);
+        setErrorResponse(`${err.message}`);
       });
   };
 
@@ -162,7 +162,7 @@ function App() {
       .catch((err) => {
         setSuccess(false);
         setIsOpen(true);
-        setErrorResponse(`${err.error}`);
+        setErrorResponse(`${err.message}`);
       });
   };
 

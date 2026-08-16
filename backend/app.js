@@ -45,6 +45,14 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
+  if (err.joi) {
+    const message = err.joi.details.map((detail) => detail.message).join(", ");
+
+    return res.status(400).send({
+      message,
+    });
+  }
+
   const { statusCode = 500, message } = err;
 
   res.status(statusCode).send({
