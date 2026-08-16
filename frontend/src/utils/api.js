@@ -34,13 +34,10 @@ class Api {
   handleCardLikes(card) {
     // console.log(card);
     if (card.isLiked) {
-      return fetch(
-        `https://around-api.es.tripleten-services.com/v1/cards/${card._id}/likes`,
-        {
-          method: "DELETE",
-          headers: this.headers,
-        },
-      ).then((res) => {
+      return fetch(`${this.url}${card._id}/likes`, {
+        method: "DELETE",
+        headers: this.headers,
+      }).then((res) => {
         if (res.ok) {
           return res.json();
         }
@@ -48,13 +45,10 @@ class Api {
         return Promise.reject(`Error: ${res.status}`);
       });
     } else if (!card.isLiked) {
-      return fetch(
-        `https://around-api.es.tripleten-services.com/v1/cards/${card._id}/likes`,
-        {
-          method: "PUT",
-          headers: this.headers,
-        },
-      ).then((res) => {
+      return fetch(`${this.url}cards/${card._id}/likes`, {
+        method: "PUT",
+        headers: this.headers,
+      }).then((res) => {
         if (res.ok) {
           return res.json();
         }
@@ -119,7 +113,7 @@ class Api {
 // console.log(token);
 
 export const api = new Api({
-  url: "https://around-api.es.tripleten-services.com/v1/",
+  url: "https://api.ils.heise.cl/",
   headers: {
     Authorization: "288e77e1-cc55-482e-83a6-7664a6a338f5",
     // Authorization: `Bearer ${token}`,

@@ -8,6 +8,7 @@ const { errors } = require("celebrate");
 const { createUser, login } = require("./controllers/users");
 const { userRegisterValidator } = require("./middlewares/userValidations");
 const auth = require("./middlewares/auth");
+const cors = require("cors");
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post("/signin", userRegisterValidator, login);
 app.post("/signup", userRegisterValidator, createUser);
+
+app.use(cors());
 
 app.use(requestLogger);
 
