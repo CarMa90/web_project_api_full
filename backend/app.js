@@ -1,14 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const cors = require("cors");
+const { isCelebrateError } = require("celebrate");
 const cardsRoutes = require("./routes/cards");
 const usersRoutes = require("./routes/users");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { createUser, login } = require("./controllers/users");
 const { userRegisterValidator } = require("./middlewares/userValidations");
 const auth = require("./middlewares/auth");
-const cors = require("cors");
-const { isCelebrateError } = require("celebrate");
 
 const app = express();
 

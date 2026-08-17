@@ -1,15 +1,12 @@
-const { celebrate, Joi } = require("celebrate");
 const router = require("express").Router();
 const {
   getUsers,
   getUserById,
   updateUser,
   updateUserAvatar,
-  login,
   getUserInfo,
 } = require("../controllers/users");
 const {
-  userRegisterValidator,
   userUpdateValidator,
   userAvatarUpdateValidator,
 } = require("../middlewares/userValidations");

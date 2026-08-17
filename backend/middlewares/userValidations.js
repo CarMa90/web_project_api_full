@@ -10,7 +10,7 @@ const userRegisterValidator = celebrate({
       password: Joi.string()
         .required()
         .min(8)
-        .pattern(new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/))
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/)
         .messages({
           "string.min": "La contraseña debe de ser de al menos 8 caracteres",
           "string.pattern.base":
@@ -44,9 +44,7 @@ const userAvatarUpdateValidator = celebrate({
       avatar: Joi.string()
         .required()
         .pattern(
-          new RegExp(
-            /^http(s)?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/i,
-          ),
+          /^http(s)?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/i,
         )
         .messages({
           "any.required": "El campo avatar es requerido",
