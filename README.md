@@ -31,5 +31,10 @@ El backend está hecho con node.js y cuenta con las siguientes dependencias:
 
 - Mongoose: aquí se crearon los esquemas tanto de usuarios como de las tarjetas, además de esto se utilizan validaciones internas para ayudar a detectar errores y finalmente almacenar nuestra base de datos.
 
+### Ver una pequeña demostración:
+
 [Video demo](https://www.loom.com/share/131f676a5b6d49e98852a91e4654e9d1)
+
+### Prueba el sitio tu mismo:
+
 [Ver sitio web](https://www.ils.heise.cl)
