@@ -28,7 +28,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/crash-test", () => {
-  process.exit(1);
+  setTimeout(() => {
+    throw new Error("El servidor va a caer");
+  }, 0);
 });
 app.post("/signin", userLoginValidator, login);
 app.post("/signup", userRegisterValidator, createUser);
@@ -67,7 +69,7 @@ app.use((err, req, res, next) => {
 
   return res.status(statusCode).send({
     message:
-      statusCode === 500 ? "Se ha producido un error en el servidor." : message,
+      statusCode === 500 ? "An error has ocurred on the server" : message,
   });
 });
 
