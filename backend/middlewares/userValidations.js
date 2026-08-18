@@ -21,6 +21,19 @@ const userRegisterValidator = celebrate({
     .unknown(true),
 });
 
+const userLoginValidator = celebrate({
+  body: Joi.object()
+    .keys({
+      email: Joi.string().required().messages({
+        "any.required": "El campo email es requerido",
+      }),
+      password: Joi.string().required().messages({
+        "any.required": "El campo password es requerido",
+      }),
+    })
+    .unknown(true),
+});
+
 const userUpdateValidator = celebrate({
   body: Joi.object()
     .keys({
@@ -58,4 +71,5 @@ module.exports = {
   userRegisterValidator,
   userUpdateValidator,
   userAvatarUpdateValidator,
+  userLoginValidator,
 };

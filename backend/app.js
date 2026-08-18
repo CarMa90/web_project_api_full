@@ -7,7 +7,10 @@ const cardsRoutes = require("./routes/cards");
 const usersRoutes = require("./routes/users");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { createUser, login } = require("./controllers/users");
-const { userRegisterValidator } = require("./middlewares/userValidations");
+const {
+  userRegisterValidator,
+  userLoginValidator,
+} = require("./middlewares/userValidations");
 const auth = require("./middlewares/auth");
 
 const app = express();
@@ -23,7 +26,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/signin", userRegisterValidator, login);
+app.post("/signin", userLoginValidator, login);
 app.post("/signup", userRegisterValidator, createUser);
 
 app.use(requestLogger);
