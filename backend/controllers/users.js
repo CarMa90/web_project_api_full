@@ -4,6 +4,7 @@ const User = require("../models/user");
 const NotFoundError = require("../errors/not-found-err");
 const BadRequestError = require("../errors/bad-request-err");
 const UnauthorizedError = require("../errors/unauthorized-err");
+const ConflictError = require("../errors/conflict-err");
 require("dotenv").config();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -56,7 +57,16 @@ module.exports.createUser = (req, res, next) => {
     .then((hash) => {
       return User.create({ name, about, avatar, email, password: hash });
     })
-    .then((user) => res.send({ data: user }))
+    .then((user) =>
+      res.send({
+        data: {
+          email: user.email,
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+        },
+      }),
+    )
     .catch((err) => {
       if (err.name === "ValidationError") {
         const message = Object.values(err.errors)
@@ -66,7 +76,7 @@ module.exports.createUser = (req, res, next) => {
         return next(new BadRequestError(message));
       }
       if (err.cause?.code === 11000) {
-        return next(new BadRequestError(err.message));
+        return next(new ConflictError(err.message));
       }
       return next(err);
     });
