@@ -26,6 +26,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/crash-test", (req, res) => {
+  throw new Error("crash test");
+});
 app.post("/signin", userLoginValidator, login);
 app.post("/signup", userRegisterValidator, createUser);
 
