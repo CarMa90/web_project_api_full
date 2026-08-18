@@ -27,6 +27,8 @@ app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(requestLogger);
+
 app.get("/crash-test", () => {
   setTimeout(() => {
     throw new Error("El servidor va a caer");
@@ -34,8 +36,6 @@ app.get("/crash-test", () => {
 });
 app.post("/signin", userLoginValidator, login);
 app.post("/signup", userRegisterValidator, createUser);
-
-app.use(requestLogger);
 
 app.use(auth);
 

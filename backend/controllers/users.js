@@ -36,10 +36,10 @@ module.exports.getUserById = (req, res, next) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === "CastError") {
-        next(new BadRequestError("ID de usuario invalido."));
+        return next(new BadRequestError("ID de usuario invalido."));
       }
 
-      next(err);
+      return next(err);
     });
 };
 
@@ -99,10 +99,10 @@ module.exports.updateUser = (req, res, next) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(new BadRequestError(err.message));
+        return next(new BadRequestError(err.message));
       }
 
-      next(err);
+      return next(err);
     });
 };
 
@@ -123,10 +123,10 @@ module.exports.updateUserAvatar = (req, res, next) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(new BadRequestError(err.message));
+        return next(new BadRequestError(err.message));
       }
 
-      next(err);
+      return next(err);
     });
 };
 

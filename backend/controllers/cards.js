@@ -5,12 +5,6 @@ const ForbiddenError = require("../errors/forbidden-err");
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .orFail(() => {
-      const error = new NotFoundError(
-        "No fue posible encontrar los elementos buscados",
-      );
-      throw error;
-    })
     .then((cards) => res.send({ data: cards }))
     .catch((err) => {
       next(err);
@@ -24,9 +18,9 @@ module.exports.createCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(new BadRequestError(err.message));
+        return next(new BadRequestError(err.message));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -53,7 +47,7 @@ module.exports.deleteCardById = (req, res, next) => {
         return next(new BadRequestError("ID de tarjeta inválido"));
       }
 
-      next(err);
+      return next(err);
     });
 };
 
@@ -74,10 +68,12 @@ module.exports.likeCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === "CastError") {
-        next(new BadRequestError(`El id: ${req.params.cardId} no es válido`));
+        return next(
+          new BadRequestError(`El id: ${req.params.cardId} no es válido`),
+        );
       }
 
-      next(err);
+      return next(err);
     });
 };
 
@@ -98,9 +94,11 @@ module.exports.dislikeCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === "CastError") {
-        next(new BadRequestError(`El id: ${req.params.cardId} no es válido`));
+        return next(
+          new BadRequestError(`El id: ${req.params.cardId} no es válido`),
+        );
       }
 
-      next(err);
+      return next(err);
     });
 };
