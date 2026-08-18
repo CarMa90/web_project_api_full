@@ -1,7 +1,7 @@
 const Card = require("../models/card");
 const NotFoundError = require("../errors/not-found-err");
 const BadRequestError = require("../errors/bad-request-err");
-const UnauthorizedError = require("../errors/unauthorized-err");
+const ForbiddenError = require("../errors/forbidden-err");
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
@@ -40,7 +40,9 @@ module.exports.deleteCardById = (req, res, next) => {
     })
     .then((card) => {
       if (!card.owner.equals(req.user._id)) {
-        throw new UnauthorizedError("Autorización requerida");
+        throw new ForbiddenError(
+          "Prohibido eliminar una tarjeta que no es de tu propiedad",
+        );
       }
 
       return Card.findByIdAndDelete(req.params.cardId);
