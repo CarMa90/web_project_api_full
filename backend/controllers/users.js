@@ -9,10 +9,10 @@ require("dotenv").config();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch(() => res.status(500).send({ message: "Error" }));
+    .catch((err) => next(err));
 };
 
 module.exports.getUserInfo = (req, res, next) => {
