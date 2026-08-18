@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require("celebrate");
+const validator = require("validator");
 
 const userRegisterValidator = celebrate({
   body: Joi.object()
@@ -56,12 +57,15 @@ const userAvatarUpdateValidator = celebrate({
     .keys({
       avatar: Joi.string()
         .required()
-        .pattern(
-          /^http(s)?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/i,
-        )
+        .custom((value, helpers) => {
+          if (!validator.isURL(value)) {
+            return helpers.error("any.url");
+          }
+          return value;
+        })
         .messages({
           "any.required": "El campo avatar es requerido",
-          "string.pattern.base": "El avatar tiene que ser una url válida",
+          "any.url": "El avatar tiene que ser una url válida",
         }),
     })
     .unknown(true),

@@ -21,7 +21,9 @@ module.exports.getUserInfo = (req, res, next) => {
   User.findById(_id)
     .then((user) => res.send({ data: user }))
     .catch(() => {
-      return next(new UnauthorizedError("Autorización requerida"));
+      return next(
+        new NotFoundError("No se encontró ningún usuario con ese ID"),
+      );
     });
 };
 
