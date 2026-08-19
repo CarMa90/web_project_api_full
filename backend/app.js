@@ -22,6 +22,7 @@ mongoose
 const { PORT = 3000 } = process.env;
 
 app.use(cors());
+app.options("{*splat}", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
