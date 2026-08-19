@@ -1,40 +1,138 @@
-# Tripleten web_project_api_full
+# Around the World
 
-En este proyecto se diseñó un tipo de red social, donde se puede tener distintos usuarios que podrán ver las fotos de los demás así como dar o quiter likes, así mismo cada usuario puede subir fotos y sólo puede eliminar las que le pertenecen. Por otro lado se crearon errores personalizados para avisar a los usuarios cuando exista algún problema al momento de registrar un nuevo usuario o querer iniciar sesión.
+> Una red social para descubrir lugares, compartir fotografías y conectar con otros viajeros.
 
-## Tecnologías utilizadas para el frontend:
+Aplicación full-stack desarrollada con React y Node.js. Cada usuario puede crear su perfil, publicar tarjetas con fotografías de lugares del mundo y participar en la comunidad mediante likes.
 
-El frontend está elaborado con React que fue creado con Vite, así mismo cuenta con dependencias como react-dom y react-router-dom, está dividido en componentes y cada componente se renderiza de distintas formas dependiendo de diversas variables de estado. También se diseñó para poder recibir respuestas del backend y utilizarlas para un mejor funcionamiento, por ejemplo al momento de iniciar sesión este guarda un token para poder mantener la sesión iniciada al momento de recargar la página o mejor aún incluso al cerrar y volver a abrir el navegador.
+[![Ver aplicación](https://img.shields.io/badge/Aplicación-en%20línea-1f6feb?style=for-the-badge)](https://www.ils.heise.cl)
+[![Demo en video](https://img.shields.io/badge/Demo-video-e05d44?style=for-the-badge)](https://www.loom.com/share/131f676a5b6d49e98852a91e4654e9d1)
 
-### Scripts para el frontend:
+## Índice
 
-"scripts": {
-"dev": "vite --open",
-"build": "vite build",
-"lint": "eslint .",
-"preview": "vite preview"
-}
+- [Puntos fuertes](#puntos-fuertes)
+- [Funcionalidades](#funcionalidades)
+- [Tecnologías](#tecnologías)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Ejecución local](#ejecución-local)
+- [API principal](#api-principal)
+- [Enlaces](#enlaces)
 
-## Tecnologías utilizadas para el backend:
+## Puntos fuertes
 
-El backend está hecho con node.js y cuenta con las siguientes dependencias:
+- **Experiencia completa de usuario:** registro, inicio de sesión, sesión persistente y navegación protegida.
+- **Frontend componentizado:** interfaz React organizada por componentes, contextos y vistas reutilizables.
+- **API REST segura:** autenticación mediante JWT, contraseñas protegidas con `bcryptjs` y autorización en las rutas privadas.
+- **Reglas de negocio claras:** un usuario solo puede eliminar sus propias tarjetas y los likes no se duplican.
+- **Datos consistentes:** validaciones con `Joi`, `Celebrate`, Mongoose y `validator` antes de procesar las solicitudes.
+- **Manejo profesional de errores:** errores HTTP personalizados, respuesta para rutas inexistentes y registro de peticiones y fallos con Winston.
 
-- Express: facilita la creación del servidor y la API REST, se utilizó para definir los endpoints y gestionar los middlewares.
+## Funcionalidades
 
-- Bcrypt, jsonwebtoken y dotenv: se utilizan para mejorar la seguridad de la información de los usuarios, la primera encripta las contraseñas antes de guardarlas en la base de datos, la segunda se encarga de crear tokens digitales para mantener a los usuarios atenticados y finalmente dotenv cumple la función de poder acceder a la información necesaria para generar los tokens.
+### Para usuarios
 
-- Celebrate y joi: tienen el objetivo de funcionar como un middleware entre el backend y la api para no estar realizando peticiones con información incompleta o incorrecta.
+- Crear una cuenta e iniciar sesión.
+- Mantener la sesión activa mediante un token JWT almacenado localmente.
+- Consultar y editar el nombre, la descripción y el avatar del perfil.
+- Cerrar sesión desde el menú de usuario.
 
-- Cors: se encarga de proteger el origen de donde recibe las solicitudes la api.
+### Para tarjetas
 
-- Winston: para tener un registro de todos los errores y peticiones que se hagan dentro de nuestras rutas.
+- Consultar las fotografías publicadas por la comunidad.
+- Crear tarjetas con nombre y enlace de imagen.
+- Marcar y quitar likes.
+- Abrir las imágenes en una vista ampliada.
+- Eliminar únicamente las tarjetas propias.
 
-- Mongoose: aquí se crearon los esquemas tanto de usuarios como de las tarjetas, además de esto se utilizan validaciones internas para ayudar a detectar errores y finalmente almacenar nuestra base de datos.
+## Tecnologías
 
-### Ver una pequeña demostración:
+### Frontend
 
-[Video demo](https://www.loom.com/share/131f676a5b6d49e98852a91e4654e9d1)
+- React 19
+- React Router
+- Vite
+- JavaScript (JSX)
+- CSS organizado por bloques y componentes
 
-### Prueba el sitio tu mismo:
+### Backend
 
-[Ver sitio web](https://www.ils.heise.cl)
+- Node.js y Express
+- MongoDB con Mongoose
+- JWT y bcryptjs para autenticación
+- Celebrate y Joi para validación de solicitudes
+- CORS y dotenv para configuración de la aplicación
+- Winston y Express Winston para logging
+
+## Estructura del proyecto
+
+```text
+.
+├── backend/
+│   ├── controllers/     # Lógica de usuarios y tarjetas
+│   ├── errors/          # Errores HTTP personalizados
+│   ├── middlewares/     # Autenticación, validación y logs
+│   ├── models/          # Esquemas de MongoDB
+│   └── routes/          # Endpoints de la API
+└── frontend/
+	└── src/
+		├── components/  # Vistas y componentes React
+		├── contexts/    # Estado compartido
+		├── utils/       # API, autenticación y token
+		└── blocks/      # Estilos por sección
+```
+
+## Ejecución local
+
+### Requisitos
+
+- Node.js 18 o superior
+- MongoDB ejecutándose en `mongodb://localhost:27017/aroundb`
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+El servidor se inicia en `http://localhost:3000` por defecto. Para producción, define `PORT`, `NODE_ENV` y `JWT_SECRET` en un archivo `.env`.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+El frontend publicado está configurado para consumir `https://api.ils.heise.cl/`. Para trabajar con un backend local, actualiza esa URL en `frontend/src/utils/api.js` y `frontend/src/utils/auth.js`.
+
+Otros comandos útiles:
+
+```bash
+npm run build   # Genera la versión de producción
+npm run lint    # Comprueba el código con ESLint
+npm run preview # Previsualiza el build
+```
+
+## API principal
+
+| Método           | Endpoint               | Descripción                     |
+| ---------------- | ---------------------- | ------------------------------- |
+| `POST`           | `/signup`              | Registra un usuario             |
+| `POST`           | `/signin`              | Inicia sesión y devuelve un JWT |
+| `GET`            | `/users/me`            | Obtiene el perfil autenticado   |
+| `PATCH`          | `/users/me`            | Actualiza el perfil             |
+| `PATCH`          | `/users/me/avatar`     | Actualiza el avatar             |
+| `GET`            | `/cards`               | Lista las tarjetas              |
+| `POST`           | `/cards`               | Crea una tarjeta                |
+| `DELETE`         | `/cards/:cardId`       | Elimina una tarjeta propia      |
+| `PUT` / `DELETE` | `/cards/:cardId/likes` | Añade o quita un like           |
+
+Las rutas de usuarios y tarjetas requieren el encabezado `Authorization: Bearer <token>`.
+
+## Enlaces
+
+- **Aplicación:** [www.ils.heise.cl](https://www.ils.heise.cl)
+- **Demostración:** [ver video en Loom](https://www.loom.com/share/131f676a5b6d49e98852a91e4654e9d1)
+- **Repositorio del backend:** [web_project_around_express](https://github.com/CarMa90/web_project_around_express)
