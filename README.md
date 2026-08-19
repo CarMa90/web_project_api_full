@@ -7,8 +7,30 @@ Aplicación full-stack desarrollada con React y Node.js. Cada usuario puede crea
 [![Ver aplicación](https://img.shields.io/badge/Aplicación-en%20línea-1f6feb?style=for-the-badge)](https://www.ils.heise.cl)
 [![Demo en video](https://img.shields.io/badge/Demo-video-e05d44?style=for-the-badge)](https://www.loom.com/share/131f676a5b6d49e98852a91e4654e9d1)
 
+## Vista previa
+
+<table>
+	<tr>
+		<td width="50%"><img src="images/home.png" alt="Vista principal de Around the World" /></td>
+		<td width="50%"><img src="images/login.png" alt="Pantalla de inicio de sesión" /></td>
+	</tr>
+	<tr>
+		<td align="center"><strong>Explora lugares y fotografías</strong></td>
+		<td align="center"><strong>Acceso seguro a la comunidad</strong></td>
+	</tr>
+	<tr>
+		<td width="50%"><img src="images/register.png" alt="Pantalla de registro" /></td>
+		<td width="50%"><img src="images/errorPersonalizado.png" alt="Pantalla de error personalizada" /></td>
+	</tr>
+	<tr>
+		<td align="center"><strong>Crea tu cuenta</strong></td>
+		<td align="center"><strong>Mensajes de error claros</strong></td>
+	</tr>
+</table>
+
 ## Índice
 
+- [Vista previa](#vista-previa)
 - [Puntos fuertes](#puntos-fuertes)
 - [Funcionalidades](#funcionalidades)
 - [Tecnologías](#tecnologías)
