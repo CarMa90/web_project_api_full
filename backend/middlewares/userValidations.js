@@ -1,4 +1,4 @@
-const { celebrate, Joi } = require("celebrate");
+const { celebrate, Joi, Segments } = require("celebrate");
 const validator = require("validator");
 
 const userRegisterValidator = celebrate({
@@ -71,9 +71,22 @@ const userAvatarUpdateValidator = celebrate({
     .unknown(true),
 });
 
+const userIdValidator = celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    userId: Joi.string()
+      .pattern(/^[0-9a-fA-F]{24}$/)
+      .required()
+      .messages({
+        "string.pattern.base": "El userId debe ser un ID válido de Mongo.",
+        "any.required": "El userId es obligatorio.",
+      }),
+  }),
+});
+
 module.exports = {
   userRegisterValidator,
   userUpdateValidator,
   userAvatarUpdateValidator,
   userLoginValidator,
+  userIdValidator,
 };

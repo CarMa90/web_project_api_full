@@ -1,4 +1,4 @@
-const { celebrate, Joi } = require("celebrate");
+const { celebrate, Joi, Segments } = require("celebrate");
 
 const createCardValidator = celebrate({
   body: Joi.object().keys({
@@ -19,4 +19,16 @@ const createCardValidator = celebrate({
   }),
 });
 
-module.exports = { createCardValidator };
+const cardIdValidator = celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    cardId: Joi.string()
+      .pattern(/^[0-9a-fA-F]{24}$/)
+      .required()
+      .messages({
+        "string.pattern.base": "El cardId debe ser un ID válido de Mongo.",
+        "any.required": "El cardId es obligatorio.",
+      }),
+  }),
+});
+
+module.exports = { createCardValidator, cardIdValidator };

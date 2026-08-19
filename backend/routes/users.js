@@ -9,13 +9,14 @@ const {
 const {
   userUpdateValidator,
   userAvatarUpdateValidator,
+  userIdValidator,
 } = require("../middlewares/userValidations");
 
 router.get("/", getUsers);
 
 router.get("/me", getUserInfo);
 
-router.get("/:userId", getUserById);
+router.get("/:userId", userIdValidator, getUserById);
 
 router.patch("/me", userUpdateValidator, updateUser);
 

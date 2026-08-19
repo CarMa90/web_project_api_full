@@ -56,6 +56,14 @@ app.use((err, req, res, next) => {
   console.log(err);
 
   if (isCelebrateError(err)) {
+    const params = err.details.get("params");
+
+    if (params) {
+      return res.status(400).send({
+        message: params.details[0].message,
+      });
+    }
+
     const body = err.details.get("body");
 
     if (body) {
