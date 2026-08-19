@@ -47,9 +47,7 @@ const userSchema = new mongoose.Schema({
       "https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg",
     validate: {
       validator(v) {
-        const regex =
-          /^http(s)?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/i;
-        return regex.test(v);
+        return validator.isURL(v);
       },
       message: (props) => `Lo sentimos ${props.value} no es un enlace válido.`,
     },
