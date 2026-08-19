@@ -20,7 +20,7 @@ Aplicación full-stack desarrollada con React y Node.js. Cada usuario puede crea
 	</tr>
 	<tr>
 		<td width="50%"><img src="images/register.png" alt="Pantalla de registro" /></td>
-		<td width="50%"><img src="images/errorPersonalizado.png" alt="Pantalla de error personalizada" /></td>
+		<td width="50%"><img src="images/errorMessagePersonalizado.png" alt="Pantalla de error personalizada" /></td>
 	</tr>
 	<tr>
 		<td align="center"><strong>Crea tu cuenta</strong></td>
