@@ -38,7 +38,7 @@ export default function Card({ card, handleOpenPopup, onCardLike }) {
             aria-label="Like card"
             type="button"
             className={
-              likes.length > 0
+              likes.includes(currentUser._id)
                 ? "card__like-button card__like-button_is-active"
                 : "card__like-button"
             }
